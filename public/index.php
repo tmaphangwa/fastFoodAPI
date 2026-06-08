@@ -7,16 +7,8 @@
 
     $app = AppFactory::create();
     
-    $app->get('/', function (Request $request, Response $response, $args) {
-        $database = new App\Database;
-
-        $foodRepository = new App\Repositories\FoodRepository($database);
-        $data = $foodRepository->getAll();
-
-        $body = json_encode($data, true);
-        $response->getBody()->write($body);
-        return $response->withHeader('Content-Type', 'application/json');
-    });
+    $api = new \App\Route\Api;
+    $api->registerFoodRoutes($app);
 
     $app->run();
 ?>

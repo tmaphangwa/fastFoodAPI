@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'bc0fedb3a1afaa52715c3ab0bed0d31bf298f96a',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'bc0fedb3a1afaa52715c3ab0bed0d31bf298f96a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -92,8 +92,8 @@
             'dev_requirement' => false,
         ),
         'illuminate/database' => array(
-            'pretty_version' => 'v12.60.2',
-            'version' => '12.60.2.0',
+            'pretty_version' => 'v12.61.0',
+            'version' => '12.61.0.0',
             'reference' => '9c479e8bc8ee33a8d557224812f9ce6a69e88ee3',
             'type' => 'library',
             'install_path' => __DIR__ . '/../illuminate/database',

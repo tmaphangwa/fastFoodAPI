@@ -517,8 +517,8 @@
         },
         {
             "name": "illuminate/database",
-            "version": "v12.60.2",
-            "version_normalized": "12.60.2.0",
+            "version": "v12.61.0",
+            "version_normalized": "12.61.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
