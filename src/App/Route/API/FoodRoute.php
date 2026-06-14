@@ -1,8 +1,8 @@
 <?php
-    Declare(strict_types=1);
-    namespace App\Route;
+    declare(strict_types=1);
+    namespace App\Route\API;
 
-    class Api
+    class FoodRoute
     {
         public function registerFoodRoutes($app)
         {
