@@ -4,7 +4,7 @@
     use App\Database;
     use PDO;
 
-    class CartItemRepository{
+    class UserRepository{
         public function __construct(private Database $database){
 
         }
@@ -12,38 +12,38 @@
         public function getAll():array{
             $pdo = $this->database->getConnection();
 
-            $stmt = $pdo->query('SELECT * FROM cart_items');
+            $stmt = $pdo->query('SELECT * FROM users');
             return $stmt->fetchAll();
         }
 
         public function getById(int $id):array{
             $pdo = $this->database->getConnection();
 
-            $stmt = $pdo->prepare('SELECT * FROM cart_items WHERE id = :id');
+            $stmt = $pdo->prepare('SELECT * FROM users WHERE id = :id');
             $stmt->execute(['id' => $id]);
             return $stmt->fetch();
         }
 
-        public function create(int $cartId, int $foodId, int $quantity):int{
+        public function create(string $email, string $password):int{
             $pdo = $this->database->getConnection();
 
-            $stmt = $pdo->prepare('INSERT INTO cart_items (cart_id, food_id, quantity) VALUES (:cart_id, :food_id, :quantity)');
-            $stmt->execute(['cart_id' => $cartId, 'food_id' => $foodId, 'quantity' => $quantity]);
+            $stmt = $pdo->prepare('INSERT INTO users (email, password) VALUES (:email, :password)');
+            $stmt->execute(['email' => $email, 'password' => password_hash($password, PASSWORD_DEFAULT)]);
             return (int)$pdo->lastInsertId();
         }
 
-        public function update(int $id, int $cartId, int $foodId, int $quantity):bool{
+        public function update(int $id, string $email, string $password):bool{
             $pdo = $this->database->getConnection();
 
-            $stmt = $pdo->prepare('UPDATE cart_items SET cart_id = :cart_id, food_id = :food_id, quantity = :quantity WHERE id = :id');
-            $stmt->execute(['id' => $id, 'cart_id' => $cartId, 'food_id' => $foodId, 'quantity' => $quantity]);
+            $stmt = $pdo->prepare('UPDATE users SET email = :email, password = :password WHERE id = :id');
+            $stmt->execute(['id' => $id, 'email' => $email, 'password' => password_hash($password, PASSWORD_DEFAULT)]);
             return (bool)$stmt->rowCount();
         }
 
         public function delete(int $id):bool{
             $pdo = $this->database->getConnection();
 
-            $stmt = $pdo->prepare('DELETE FROM cart_items WHERE id = :id');
+            $stmt = $pdo->prepare('DELETE FROM users WHERE id = :id');
             $stmt->execute(['id' => $id]);
             return (bool)$stmt->rowCount();
         }

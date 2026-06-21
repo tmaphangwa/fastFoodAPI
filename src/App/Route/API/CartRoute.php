@@ -2,6 +2,8 @@
     declare(strict_types=1);
     namespace App\Route\API;
 
+    use Middleware\JwtToken;
+
     class CartRoute
     {
         public function registerCartRoutes($app)
@@ -15,7 +17,7 @@
                 $body = json_encode($data, JSON_PRETTY_PRINT);
                 $response->getBody()->write($body);
                 return $response->withHeader('Content-Type', 'application/json');
-            });
+            })->add(new \App\Middleware\RequireToken());
 
             $app->get('/api/carts/{id}', function ($request, $response, $args) {
                 $database = new \App\Database;
@@ -31,7 +33,7 @@
                     $response->getBody()->write(json_encode(['error' => 'Cart not found'], true));
                     return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
                 }
-            });
+            })->add(new \App\Middleware\RequireToken());
 
             $app->post('/api/carts', function ($request, $response, $args) {
                 $database = new \App\Database;
@@ -47,7 +49,7 @@
                     $response->getBody()->write(json_encode(['error' => 'Invalid input'], true));
                     return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
                 }
-            });
+            })->add(new \App\Middleware\RequireToken());
 
             $app->put('/api/carts/{id}', function ($request, $response, $args) {
                 $database = new \App\Database;
@@ -67,7 +69,7 @@
                     $response->getBody()->write(json_encode(['error' => 'Invalid input'], true));
                     return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
                 }
-            });
+            })->add(new \App\Middleware\RequireToken());
 
             $app->delete('/api/carts/{id}', function ($request, $response, $args) {
                 $database = new \App\Database;
@@ -81,7 +83,7 @@
                     $response->getBody()->write(json_encode(['error' => 'Cart not found'], true));
                     return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
                 }
-            });
+            })->add(new \App\Middleware\RequireToken());
         }
     }
 ?>
