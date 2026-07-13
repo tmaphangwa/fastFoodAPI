@@ -40,8 +40,16 @@
                 $data = json_decode($request->getBody()->getContents(), true);
 
                 if (isset($data['email']) && isset($data['password'])) {
-                    $id = $userRepository->create($data['email'], $data['password']);
-                    $response->getBody()->write(json_encode(['id' => $id], JSON_PRETTY_PRINT));
+                    $id = (string)time(). bin2hex(random_bytes(10));
+                    $passCode = bin2hex(random_bytes(3));
+
+                    $user = $userRepository->create($id, $data['email'], $data['password'], $passCode);
+
+                    if (!$user) {
+                        $response->getBody()->write(json_encode(['error' => 'User already exists'], JSON_PRETTY_PRINT));
+                        return $response->withStatus(409)->withHeader('Content-Type', 'application/json');
+                    }
+                    $response->getBody()->write(json_encode($user, JSON_PRETTY_PRINT));
                     return $response->withStatus(201)->withHeader('Content-Type', 'application/json');
                 } else {
                     $response->getBody()->write(json_encode(['error' => 'Email and password required'], JSON_PRETTY_PRINT));
@@ -67,11 +75,11 @@
                 $data = $userRepository->getById((int)$args['id']);
 
                 if ($data) {
-                    $body = json_encode($data, true);
+                    $body = json_encode($data, JSON_PRETTY_PRINT);
                     $response->getBody()->write($body);
                     return $response->withHeader('Content-Type', 'application/json');
                 } else {
-                    $response->getBody()->write(json_encode(['error' => 'User not found'], true));
+                    $response->getBody()->write(json_encode(['error' => 'User not found'], JSON_PRETTY_PRINT));
                     return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
                 }
             });
@@ -84,10 +92,10 @@
 
                 if (isset($data['username']) && isset($data['email'])) {
                     $id = $userRepository->create($data['username'], $data['email']);
-                    $response->getBody()->write(json_encode(['id' => $id], true));
+                    $response->getBody()->write(json_encode(['id' => $id], JSON_PRETTY_PRINT));
                     return $response->withStatus(201)->withHeader('Content-Type', 'application/json');
                 } else {
-                    $response->getBody()->write(json_encode(['error' => 'Invalid input'], true));
+                    $response->getBody()->write(json_encode(['error' => 'Invalid input'], JSON_PRETTY_PRINT));
                     return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
                 }
             });
@@ -103,11 +111,11 @@
                     if ($updated) {
                         return $response->withStatus(204);
                     } else {
-                        $response->getBody()->write(json_encode(['error' => 'User not found'], true));
+                        $response->getBody()->write(json_encode(['error' => 'User not found'], JSON_PRETTY_PRINT));
                         return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
                     }
                 } else {
-                    $response->getBody()->write(json_encode(['error' => 'Invalid input'], true));
+                    $response->getBody()->write(json_encode(['error' => 'Invalid input'], JSON_PRETTY_PRINT));
                     return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
                 }
             });
@@ -121,7 +129,7 @@
                 if ($deleted) {
                     return $response->withStatus(204);
                 } else {
-                    $response->getBody()->write(json_encode(['error' => 'User not found'], true));
+                    $response->getBody()->write(json_encode(['error' => 'User not found'], JSON_PRETTY_PRINT));
                     return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
                 }
             });

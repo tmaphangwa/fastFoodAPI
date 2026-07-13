@@ -11,6 +11,17 @@
 
     $app = AppFactory::create();
 
+    $twig = Twig::create(__DIR__ . '/../views', ['cache' => false]);
+    $app->add(TwigMiddleware::create($app, $twig));
+
+    $app->get('/', function ($request, $response) {
+        $view = Twig::fromRequest($request);
+        
+        return $view->render($response, 'dashboard.html.twig', [
+            'name' => 'John',
+        ]);
+    });
+
     $foodRoute = new \App\Route\API\FoodRoute();
     $foodRoute->registerFoodRoutes($app);
     

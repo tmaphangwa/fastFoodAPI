@@ -16,7 +16,7 @@
             return $stmt->fetchAll();
         }
 
-        public function getById(int $id):array{
+        public function getById(string $id):array{
             $pdo = $this->database->getConnection();
 
             $stmt = $pdo->prepare('SELECT * FROM users WHERE id = :id');
@@ -24,15 +24,22 @@
             return $stmt->fetch();
         }
 
-        public function create(string $email, string $password):int{
-            $pdo = $this->database->getConnection();
+        public function create(string $id, string $email, string $password, string $passCode):array{
+            try {
+                $pdo = $this->database->getConnection();
 
-            $stmt = $pdo->prepare('INSERT INTO users (email, password) VALUES (:email, :password)');
-            $stmt->execute(['email' => $email, 'password' => password_hash($password, PASSWORD_DEFAULT)]);
-            return (int)$pdo->lastInsertId();
+                $stmt = $pdo->prepare('INSERT INTO users (id, email, password, passCode) VALUES (:id, :email, :password, :passCode)');
+                $stmt->execute(['id' => $id, 'email' => $email, 'password' => password_hash($password, PASSWORD_DEFAULT), 'passCode' => $passCode]);
+                return $this->getById($id);
+            } catch (PDOException $e) {
+                $response = new \Slim\Psr7\Response();
+                $response->getBody()->write(json_encode(['error' => $e->getMessage()], JSON_PRETTY_PRINT));
+                return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+            }
+            
         }
 
-        public function update(int $id, string $email, string $password):bool{
+        public function update(string $id, string $email, string $password):bool{
             $pdo = $this->database->getConnection();
 
             $stmt = $pdo->prepare('UPDATE users SET email = :email, password = :password WHERE id = :id');
@@ -40,7 +47,7 @@
             return (bool)$stmt->rowCount();
         }
 
-        public function delete(int $id):bool{
+        public function delete(string $id):bool{
             $pdo = $this->database->getConnection();
 
             $stmt = $pdo->prepare('DELETE FROM users WHERE id = :id');
