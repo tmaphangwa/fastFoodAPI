@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'c61f16ce97f409084bed8fdf33ebe285cb136d8b',
+        'reference' => '30af3934035b4a5ffdfa8587d14909087b07f945',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'c61f16ce97f409084bed8fdf33ebe285cb136d8b',
+            'reference' => '30af3934035b4a5ffdfa8587d14909087b07f945',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -304,6 +304,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'slim/twig-view' => array(
+            'pretty_version' => '3.4.1',
+            'version' => '3.4.1.0',
+            'reference' => 'b4268d87d0e327feba5f88d32031e9123655b909',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../slim/twig-view',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'spatie/once' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -352,6 +361,15 @@
             'reference' => 'dfb55726c3a76ea3b6459fcfda1ec2d80a682411',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-php80',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'symfony/polyfill-php81' => array(
+            'pretty_version' => 'v1.38.1',
+            'version' => '1.38.1.0',
+            'reference' => '6bfb9c766cacffbc8e118cb87217d08ed84e5cd7',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/polyfill-php81',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -405,6 +423,15 @@
             'provided' => array(
                 0 => '2.3|3.0',
             ),
+        ),
+        'twig/twig' => array(
+            'pretty_version' => 'v3.28.0',
+            'version' => '3.28.0.0',
+            'reference' => '597c12ed286fb9d1701a36684ce6e0cbe28ebc8b',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../twig/twig',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'vlucas/phpdotenv' => array(
             'pretty_version' => 'v5.6.3',
