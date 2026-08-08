@@ -24,6 +24,14 @@
             return $stmt->fetch();
         }
 
+        public function getByEmail(string $email){
+            $pdo = $this->database->getConnection();
+
+            $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
+            $stmt->execute(['email' => $email]);
+            return $stmt->fetch();
+        }
+
         public function create(string $id, string $email, string $password, string $passCode):array{
             try {
                 $pdo = $this->database->getConnection();
