@@ -9,14 +9,14 @@
 
         }
 
-        public function getAll():array{
+        public function getAll(){
             $pdo = $this->database->getConnection();
 
             $stmt = $pdo->query('SELECT * FROM customers');
             return $stmt->fetchAll();
         }
 
-        public function getById(int $id):array{
+        public function getById(string $id){
             $pdo = $this->database->getConnection();
 
             $stmt = $pdo->prepare('SELECT * FROM customers WHERE id = :id');
@@ -24,7 +24,7 @@
             return $stmt->fetch();
         }
 
-        public function create(string $name, string $email):int{
+        public function create(string $id, string $name, string $email):int{
             $pdo = $this->database->getConnection();
 
             $stmt = $pdo->prepare('INSERT INTO customers (name, email) VALUES (:name, :email)');

@@ -32,8 +32,11 @@
             return $stmt->fetch();
         }
 
-        public function create(string $id, string $email, string $password, string $passCode):array{
+        public function create(string $email, string $password):array{
             try {
+                $id = uniqid('', true);
+                $passCode = bin2hex(random_bytes(3));
+                
                 $pdo = $this->database->getConnection();
 
                 $stmt = $pdo->prepare('INSERT INTO users (id, email, password, passCode) VALUES (:id, :email, :password, :passCode)');

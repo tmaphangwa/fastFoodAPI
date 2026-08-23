@@ -1,0 +1,25 @@
+{% extends "layouts/_main.html.twig" %}
+
+{% block title %}Staff Member{% endblock %}
+
+{% block content %}
+    <div class="">
+        <h1> Staff Member </h1>
+
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ staff.name }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="surname" class="form-label">Surname</label>
+                <input type="text" class="form-control" id="surname" name="surname" value="{{ staff.surname }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ staff.email }}" readonly>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

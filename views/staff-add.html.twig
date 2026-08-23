@@ -10,7 +10,7 @@
             {% if error %}
                 <div class="alert alert-danger">{{ error }}</div>
             {% endif %}
-            <form method="post" action="/login">
+            <form class="col-sm-6" method="post" action="/login">
                 <div class="mb-3">
                     <label for="name" class="form-label">name</label>
                     <input type="text" class="form-control" id="name" name="name" required>
@@ -27,8 +27,8 @@
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <button type="submit" class="btn btn-primary w-100">Add Staff</button>
             </form>
-        </div>>
+        </div>
     </div>
 {% endblock %}

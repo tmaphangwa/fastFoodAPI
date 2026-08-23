@@ -8,10 +8,14 @@
     </head>
     <body>
         <div class="d-flex">
-            <div class="sidebar nav flex-column">
-                <a href="/food" class="sidebar-link text-decoration-none p-3"></a>
-                <a href="/dashboard" class="sidebar-link text-decoration-none p-3">Dashboard</a>
-                <a href="/food" class="sidebar-link text-decoration-none p-3">Food</a>
+            <div  class="sidebar col-sm-2 bg-light d-flex flex-column p-3" style="height: 100vh;">
+                <img src="/img/logo.png" alt="Logo" class="logo" style="width: 100px; height: auto; margin: 10px;">
+                
+                <div class="nav flex-column">
+                    <a href="/food" class="sidebar-link text-decoration-none p-3">Customer</a>
+                    <a href="/dashboard" class="sidebar-link text-decoration-none p-3">Dashboard</a>
+                    <a href="/food" class="sidebar-link text-decoration-none p-3">Food</a>
+                </div>
             </div>
             <div class="content flex-fill">
                 <nav class="navbar navbar-expand bg-body-tertiary">
@@ -39,8 +43,11 @@
                         </ul>
                         </div>
                     </div>
-                    </nav>
-                {% block content %}{% endblock %}
+                </nav>
+
+                <div class="p-5">
+                    {% block content %}{% endblock %}
+                </div>
             </div>
         </div>
         
