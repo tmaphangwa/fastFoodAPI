@@ -11,77 +11,61 @@
         {
             $app->get('/cart', function ($request, $response, $args) {
                 $view = Twig::fromRequest($request);
+                $database = new \App\Database;
+
+                $cartRepository = new \App\Repositories\CartRepository($database);
+                $carts = $cartRepository->findAll();
         
                 return $view->render($response, 'cart.html.twig', [
-                    'name' => 'John',
+                    'carts' => $carts
+                ]);
+            });
+
+            $app->get('/cart/{id}', function ($request, $response, $args) {
+                $view = Twig::fromRequest($request);
+                $database = new \App\Database;
+
+                $cartRepository = new \App\Repositories\CartRepository($database);
+                $cart = $cartRepository->findById((int)$args['id']);
+
+                if (!$cart) {
+                    return $view->render($response, 'cart.html.twig', [
+                        'id' => $args['id']
+                    ]);
+                }
+
+                return $view->render($response, 'cart-view.html.twig', [
+                    'cart' => $cart
                 ]);
             });
 
             $app->post('/cart', function ($request, $response, $args) {
                 $database = new \App\Database;
-                $userRepository = new \App\Repositories\Staff($database);
+                $cartRepository = new \App\Repositories\CartRepository($database);
 
                 $view = Twig::fromRequest($request);
 
                 $data = $request->getParsedBody();
 
-                if(isset($data['name'], $data['surname'], $data['email'], $data['password'])){
-                    $userRepository = new \App\Repositories\UserRepository($database);
-                    $user = $userRepository->create($data['email'], $data['password']);
+                if(isset($data['user_id'], $data['food_id'], $data['quantity'])){
+                    $cart = $cartRepository->create($data['user_id'], $data['food_id'], (int)$data['quantity']);
 
-                    if($user){
-                        $staffRepository = new \App\Repositories\Staff($database);
-                        $staff = $staffRepository->create($data['name'], $data['surname'], $user['id']);
-
-                        if($staff){
-                            return $view->render($response, 'staff-view.html.twig', [
-                                'name' => $data['name'],
-                                'surname' => $data['surname'],
-                                'email' => $data['email']
-                            ]);
-                        } else {
-                            return $view->render($response, 'staff-add.html.twig', [
-                                'name' => 'John',
-                                'error' => 'Failed to add staff member.'
-                            ]);
-                        }
-
-                        return $view->render($response, 'staff-view.html.twig', [
-                            'name' => $data['name'],
-                            'surname' => $data['surname'],
-                            'email' => $data['email']
+                    if($cart){
+                        return $view->render($response, 'cart-view.html.twig', [
+                            'user_id' => $data['user_id'],
+                            'food_id' => $data['food_id'],
+                            'quantity' => $data['quantity']
                         ]);
                     } else {
-                        return $view->render($response, 'staff-add.html.twig', [
-                            'name' => 'John',
-                            'error' => 'Failed to add staff member.'
+                        return $view->render($response, 'cart-add.html.twig', [
+                            'error' => 'Failed to add item to cart.'
                         ]);
                     }
+                } else {
+                    return $view->render($response, 'cart-add.html.twig', [
+                        'error' => 'Missing required fields.'
+                    ]);
                 }
-            });
-
-            $app->get('/cart/{id}', function ($request, $response, $args) {
-                $view = Twig::fromRequest($request);
-        
-                return $view->render($response, 'cart.html.twig', [
-                    'name' => 'John',
-                ]);
-            });
-
-            $app->update('/cart/{id}', function ($request, $response, $args) {
-                $view = Twig::fromRequest($request);
-        
-                return $view->render($response, 'cart.html.twig', [
-                    'name' => 'John',
-                ]);
-            });
-
-            $app->delete('/cart/{id}', function ($request, $response, $args) {
-                $view = Twig::fromRequest($request);
-        
-                return $view->render($response, 'cart.html.twig', [
-                    'name' => 'John',
-                ]);
             });
         }
     }

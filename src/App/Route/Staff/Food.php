@@ -11,109 +11,59 @@
         {
             $app->get('/food', function ($request, $response, $args) {
                 $view = Twig::fromRequest($request);
+                $database = new \App\Database;
+
+                $foodRepository = new \App\Repositories\FoodRepository($database);
+                $foods = $foodRepository->findAll();
         
                 return $view->render($response, 'food.html.twig', [
-                    'name' => 'John',
+                    'foods' => $foods
                 ]);
             });
 
-            $app->post('/food', function ($request, $response, $args) {
-                $database = new \App\Database;
-                $userRepository = new \App\Repositories\Staff($database);
-
-                $view = Twig::fromRequest($request);
-
-                $data = $request->getParsedBody();
-
-                if(isset($data['name'], $data['surname'], $data['email'], $data['password'])){
-                    $userRepository = new \App\Repositories\UserRepository($database);
-                    $user = $userRepository->create($data['email'], $data['password']);
-
-                    if($user){
-                        $staffRepository = new \App\Repositories\Staff($database);
-                        $staff = $staffRepository->create($data['name'], $data['surname'], $user['id']);
-
-                        if($staff){
-                            return $view->render($response, 'staff-view.html.twig', [
-                                'name' => $data['name'],
-                                'surname' => $data['surname'],
-                                'email' => $data['email']
-                            ]);
-                        } else {
-                            return $view->render($response, 'staff-add.html.twig', [
-                                'name' => 'John',
-                                'error' => 'Failed to add staff member.'
-                            ]);
-                        }
-
-                        return $view->render($response, 'staff-view.html.twig', [
-                            'name' => $data['name'],
-                            'surname' => $data['surname'],
-                            'email' => $data['email']
-                        ]);
-                    } else {
-                        return $view->render($response, 'staff-add.html.twig', [
-                            'name' => 'John',
-                            'error' => 'Failed to add staff member.'
-                        ]);
-                    }
-                }
-            });
-
             $app->get('/food/{id}', function ($request, $response, $args) {
-                $database = new \App\Database;
-                $foodRepository = new \App\Repositories\FoodRepository($database);
-
-                $foodId = (int)$args['id'];
-                $food = $foodRepository->getById($foodId);
-
                 $view = Twig::fromRequest($request);
+                $database = new \App\Database;
+
+                $foodRepository = new \App\Repositories\FoodRepository($database);
+                $food = $foodRepository->findById((int)$args['id']);
+
+                if (!$food) {
+                    return $view->render($response, 'food.html.twig', [
+                        'id' => $args['id']
+                    ]);
+                }
+
                 return $view->render($response, 'food-view.html.twig', [
                     'food' => $food
                 ]);
             });
 
-            $app->update('/food/{id}', function ($request, $response, $args) {
+            $app->post('/food', function ($request, $response, $args) {
                 $database = new \App\Database;
                 $foodRepository = new \App\Repositories\FoodRepository($database);
-
-                $foodId = (int)$args['id'];
-                $data = $request->getParsedBody();
-
-                if(isset($data['name'], $data['price'])){
-                    $updated = $foodRepository->update($foodId, $data['name'], (float)$data['price']);
-
-                    $view = Twig::fromRequest($request);
-
-                    if($updated){
-                        return $view->render($response, 'food-view.html.twig', [
-                            'food' => $foodRepository->getById($foodId)
-                        ]);
-                    } else {
-                        return $view->render($response, 'food-view.html.twig', [
-                            'food' => $foodRepository->getById($foodId),
-                            'error' => 'Failed to update food item.'
-                        ]);
-                    }
-                }
-            });
-
-            $app->delete('/food/{id}', function ($request, $response, $args) {
-                $database = new \App\Database;
-                $foodRepository = new \App\Repositories\FoodRepository($database);
-
-                $foodId = (int)$args['id'];
-                $deleted = $foodRepository->delete($foodId);
 
                 $view = Twig::fromRequest($request);
 
-                if($deleted){
-                    return $view->render($response, 'food-list.html.twig', [
-                        'message' => 'Food item deleted successfully'
-                    ]);
+                $data = $request->getParsedBody();
+
+                if(isset($data['name'], $data['price'], $data['category_id'])){
+                    $food = $foodRepository->create($data['name'], (float)$data['price'], (int)$data['category_id']);
+
+                    if($food){
+                        return $view->render($response, 'food-view.html.twig', [
+                            'name' => $data['name'],
+                            'price' => $data['price'],
+                            'category_id' => $data['category_id']
+                        ]);
+                    } else {
+                        return $view->render($response, 'food-add.html.twig', [
+                            'error' => 'Failed to add food item.'
+                        ]);
+                    }
                 } else {
-                    return $view->render($response, 'food-list.html.twig', [
-                        'error' => 'Failed to delete food item'
+                    return $view->render($response, 'food-add.html.twig', [
+                        'error' => 'Missing required fields.'
                     ]);
                 }
             });

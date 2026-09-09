@@ -32,8 +32,9 @@
                         $userRoleRepository = new \App\Repositories\UserRoleRepository($database);
                         $userRoles = $userRoleRepository->getById($user['id']);
 
-                        session_start();$_SESSION['userId'] = $user['id'];
-                        session_start();$_SESSION['name'] = $user['username'];
+                        session_start();
+                        $_SESSION['userId'] = $user['id'];
+                        $_SESSION['name'] = $user['username'];
 
                         if(isset($data['page'])){
                             return $view->render($response, $dat['page'].'.html.twig', [
